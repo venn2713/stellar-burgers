@@ -35,3 +35,27 @@
 //     }
 //   }
 // }
+
+export {};
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      addIngredient(
+        selector: string,
+        name: string,
+        ...constructorSelectors: string[]
+      ): Chainable<void>;
+    }
+  }
+}
+
+Cypress.Commands.add(
+  'addIngredient',
+  (selector: string, name: string, ...constructorSelectors: string[]) => {
+    cy.get(selector).contains('Добавить').click();
+    constructorSelectors.forEach((cs) =>
+      cy.get(cs).contains(name).should('exist')
+    );
+  }
+);
